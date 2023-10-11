@@ -11,27 +11,39 @@ class Interface:
         self.root.title("Image Converter")
         self.root.geometry("480x120")
 
-        #mainframe
+        #frame
+        self.titleframe = ttk.Frame(root)
         self.mainframe = ttk.Frame(root)
+        self.convertbframe = ttk.Frame(root)
+        self.statusbframe = ttk.Frame(root)
 
         #buttons
-        self.file_browser = ttk.Button(self.mainframe, text="Open File", command=self.file_dialog)
-        self.convert = ttk.Button(self.mainframe, text="Convert to JPEG", command=lambda: module.multiple_process(self.pathlist, self.status) )
+        self.file_browser = ttk.Button(self.mainframe, text="Open File", command=lambda: self.file_dialog(self.status))
+        self.convert = ttk.Button(self.convertbframe, text="Convert to JPEG", command=lambda: module.multiple_process(self.pathlist, self.status) )
 
         #text variables
         self.textbar_value = StringVar()
         self.statusbar_value = StringVar()
 
         #labels
+        self.title = ttk.Label(self.titleframe, text="HEIC2JPEG Format Converter__", style="title.TLabel")
         self.textbar = ttk.Label(self.mainframe, textvariable=self.textbar_value)
-        self.statusbar = ttk.Label(self.mainframe, textvariable=self.statusbar_value)
+        self.statusbar = ttk.Label(self.statusbframe, textvariable=self.statusbar_value)
 
         #pack
+        self.titleframe.pack(fill=BOTH, expand=True)
+        self.title.pack(side=LEFT)
         self.mainframe.pack()
         self.textbar.pack(anchor=CENTER)
         self.file_browser.pack(anchor=CENTER)
+        self.convertbframe.pack()
         self.convert.pack(anchor=CENTER)
+        self.statusbframe.pack()
         self.statusbar.pack(anchor=CENTER)
+
+        #Style
+        st = ttk.Style()
+        st.configure("title.TLabel", font=("Helvetica",13,"bold"))
 
         #values
         self.pathlist = None
@@ -39,12 +51,16 @@ class Interface:
 
 
 
-    def file_dialog(self):
+    def file_dialog(self, update_func):
         file_path = askopenfilename(title="Select Files to Convert.", filetypes=[("All Files", "*.*")], multiple=True)
         output = []
+        count = 0
         for path in file_path:
             if path and module.is_image(path):
                 output.append(path)
+            else:
+                count += 1
+                update_func(f"{count} non HEIC file found, it will be deselected!")
         if output:
             self.label_updater(output)
             self.pathlist = output

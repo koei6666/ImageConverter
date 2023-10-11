@@ -50,7 +50,8 @@ def converter(path, save_to_path, format):
     return 1
 
 def is_image(path):
-    image_file_suffixes = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.webp', '.ico', '.jfif', '.heif', '.heic', '.svg', '.raw', '.indd', '.ai', '.eps', '.pdf')
+    #image_file_suffixes = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.webp', '.ico', '.jfif', '.heif', '.heic', '.svg', '.raw', '.indd', '.ai', '.eps', '.pdf')
+    image_file_suffixes = ('.heif', '.heic')
     file_type = pathlib.Path(path).suffix.lower()
     if file_type in image_file_suffixes:
         return 1
