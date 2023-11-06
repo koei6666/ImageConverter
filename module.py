@@ -2,6 +2,8 @@ from PIL import Image
 import pillow_heif
 import pathlib
 import os
+from io import BytesIO
+import base64
 
 def multiple_process(target_object, status_function):
     if target_object:
@@ -51,8 +53,18 @@ def converter(path, save_to_path, format):
 
 def is_image(path):
     #image_file_suffixes = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.webp', '.ico', '.jfif', '.heif', '.heic', '.svg', '.raw', '.indd', '.ai', '.eps', '.pdf')
-    image_file_suffixes = ('.heif', '.heic')
+    image_file_suffixes = ('.heif', '.heic', '.png')
     file_type = pathlib.Path(path).suffix.lower()
     if file_type in image_file_suffixes:
         return 1
     return 0
+
+def base64cove(path):
+    with Image.open(path) as img:
+        if img.mode == "RGBA":
+            img = img.convert("RGB")
+        buffered = BytesIO()
+        img.save(buffered, format="GIF")
+
+        img_str = base64.b64encode(buffered.getvalue())
+    return img_str.decode("utf-8")

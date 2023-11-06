@@ -20,6 +20,7 @@ class Interface:
         #buttons
         self.file_browser = ttk.Button(self.mainframe, text="Open File", command=lambda: self.file_dialog(self.status))
         self.convert = ttk.Button(self.convertbframe, text="Convert to JPEG", command=lambda: module.multiple_process(self.pathlist, self.status) )
+        self.convert2base64 = ttk.Button(self.convertbframe, text="Convert to Base64", command=self.base64output)
 
         #text variables
         self.textbar_value = StringVar()
@@ -40,6 +41,7 @@ class Interface:
         self.convert.pack(anchor=CENTER)
         self.statusbframe.pack()
         self.statusbar.pack(anchor=CENTER)
+        self.convert2base64.pack(ancho=CENTER)
 
         #Style
         st = ttk.Style()
@@ -77,6 +79,25 @@ class Interface:
 
     def status(self,status):
         self.statusbar_value.set(status)
+
+    def base64output(self):
+
+        file_path = askopenfilename(title="Select Files to Convert.", filetypes=[("All Files", "*.*")], multiple=False)
+
+        text = module.base64cove(file_path)
+
+        output_top = Toplevel(self.root)
+        output_top.title("Base64 Output")
+
+        result_frame = ttk.Frame(output_top)
+        result_frame.pack(expand=True)
+
+        result_text = Text(result_frame)
+        result_text.pack(expand=True)
+
+        result_text.insert(END, text)
+
+
 
 
 
